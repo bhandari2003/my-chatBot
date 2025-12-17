@@ -5,7 +5,6 @@ const cors = require('cors');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const fs = require('fs');
 
-// Auto-create uploads folder
 if (!fs.existsSync('./uploads')) {
   fs.mkdirSync('./uploads');
 }
@@ -16,7 +15,6 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-// Configure Multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/')
@@ -29,10 +27,10 @@ const upload = multer({ storage: storage });
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Use this exact string. It is the most stable and has the highest free limits.
+// *** STABLE MODEL CONFIGURATION ***
 const model = genAI.getGenerativeModel({ 
-  model: "gemini-1.5-flash-001", 
-  systemInstruction: "You are a direct and concise assistant. Give extremely brief answers." 
+  model: "gemini-1.5-flash", 
+  systemInstruction: "You are my assistant. Give answers extremely brief. Do not use filler words like 'Here is the answer' or 'Sure'." 
 });
 
 let chatHistory = []; 
